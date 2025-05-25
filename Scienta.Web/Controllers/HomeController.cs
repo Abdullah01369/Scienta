@@ -19,8 +19,10 @@ namespace Scienta.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-        var val=  await  _articleService.GetPopSciArticles(1);
-        return View(val);
+
+      var evrimagacilist= await   _articleService.GetEvrimAgaciArticles(1);
+        // var val=  await  _articleService.GetPopSciArticles(1);
+        return View(evrimagacilist);
         }
 
         public IActionResult Privacy()

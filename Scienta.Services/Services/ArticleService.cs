@@ -16,6 +16,7 @@ namespace Scienta.Services.Services
         private readonly IHttpClientFactory _httpClientFactory;
         private static HttpClient _httpClient;
         private readonly string _baseUrl = "https://popsci.com.tr/kategori/konular/bilim";
+        private readonly string _baseUrlevrimagaci = "https://evrimagaci.org/kategori/doga-bilimleri-15";
 
         //https://popsci.com.tr/kategori/konular/bilim/page/2/
         public ArticleService(IHttpClientFactory httpClientFactory)
@@ -53,43 +54,60 @@ namespace Scienta.Services.Services
                         title = title,
                         href = href,
                         img = imgUrl,
-                       from="POPSCI"
+                        from = PlatformsModel.GetPopsci()
                     });
                 }
             }
 
-            return links; 
+            return links;
         }
 
-        public static string GenerateSlug(string title)
+        public async Task<List<ArticleModel>> GetEvrimAgaciArticles(int Id)
         {
-            Dictionary<char, string> charMap = new()
-    {
-        {'ç', "c"}, {'Ç', "c"},
-        {'ğ', "g"}, {'Ğ', "g"},
-        {'ı', "i"}, {'İ', "i"},
-        {'ö', "o"}, {'Ö', "o"},
-        {'ş', "s"}, {'Ş', "s"},
-        {'ü', "u"}, {'Ü', "u"}
-    };
+            var links = new List<ArticleModel>();
 
-            title = title.ToLowerInvariant();
+            var client = _httpClientFactory.CreateClient();
 
-            var sb = new StringBuilder();
-            foreach (char c in title)
+
+            var query = (Id - 1) * 36;
+            var querystring = $"{_baseUrlevrimagaci}/{query}";
+            var response = await client.GetAsync(querystring);
+
+            var val = await response.Content.ReadAsStringAsync();
+            var doc = new HtmlDocument();
+            doc.LoadHtml(val);
+
+
+            var items = doc.DocumentNode.SelectNodes("//div[contains(@class, 'home-content-box-item')]");
+
+
+
+            foreach (var item in items)
             {
-                if (charMap.ContainsKey(c))
-                    sb.Append(charMap[c]);
-                else
-                    sb.Append(c);
+
+                var titleNode = item.SelectSingleNode(".//h3[contains(@class,'home-content-box-title')]/a");
+                string link = titleNode?.GetAttributeValue("href", "").Trim();
+                string title = titleNode?.InnerText.Trim();
+
+
+                var imgNode = item.SelectSingleNode(".//div[contains(@class,'position-relative')]//img");
+                string imgSrc = imgNode?.GetAttributeValue("src", "").Trim();
+
+
+                var tarihNode = item.SelectNodes(".//div[contains(@class,'home-content-box-tag')]")
+                                 ?.FirstOrDefault(x => x.InnerText.Contains("Tarih"));
+                string tarih = tarihNode?.InnerText.Replace("Tarih :", "").Trim();
+
+
+                links.Add(new ArticleModel { date = tarih, from =PlatformsModel.GetEvrimagaci(), href = link, img = imgSrc, title = title });
+
             }
 
-            string slug = sb.ToString();
 
-            slug = Regex.Replace(slug, @"[^a-z0-9\s-]", ""); // Alfasayısal dışı sil
-            slug = Regex.Replace(slug, @"[\s-]+", "-").Trim('-');
 
-            return slug;
+
+
+            return links;
         }
 
     }

@@ -10,6 +10,7 @@ namespace Scienta.Services.IServices
     public interface IArticleService
     {
         Task<List<ArticleModel>> GetPopSciArticles(int Id);
+        Task<List<ArticleModel>> GetEvrimAgaciArticles(int Id);
 
     }
 }
