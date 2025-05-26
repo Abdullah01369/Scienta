@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Scienta.Services.IServices;
+using Scienta.Services.Models;
 using Scienta.Web.Models;
 
 namespace Scienta.Web.Controllers
@@ -68,7 +69,21 @@ namespace Scienta.Web.Controllers
 
         public async Task<IActionResult> ReadArticle(string url)
         {
-          var val=await  _articleService.GetArticleFromPopSci(url);
+            string from="";
+            ReadArticleModel model = new ReadArticleModel();
+            if (url.Contains("popsci"))
+            {
+                from = PlatformsModel.GetPopsci();
+            }
+            if (url.Contains("evrimagaci"))
+            {
+                from = PlatformsModel.GetEvrimagaci();
+            }
+            if (url.Contains("bilimfili"))
+            {
+                from = PlatformsModel.GetBilimFili();
+            }
+            var val=await  _articleService.GetArticle(url,from);
             
             return View(val);
         }

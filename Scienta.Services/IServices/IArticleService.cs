@@ -12,7 +12,7 @@ namespace Scienta.Services.IServices
         Task<List<ArticleModel>> GetPopSciArticles(int Id);
         Task<List<ArticleModel>> GetEvrimAgaciArticles(int Id);
         Task<List<ArticleModel>> GetBilimFiliArticles(int Id);
-        Task<ReadArticleModel> GetArticleFromPopSci(string querystring);
+        Task<ReadArticleModel> GetArticle(string querystring,string from);
 
     }
 }

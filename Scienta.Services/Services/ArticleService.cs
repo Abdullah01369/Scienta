@@ -12,6 +12,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Scienta.Services.Services
 {
@@ -20,8 +21,7 @@ namespace Scienta.Services.Services
         private readonly IHttpClientFactory _httpClientFactory;
         private static HttpClient _httpClient;
         private readonly string _baseUrl = "https://popsci.com.tr/kategori/konular/bilim";
-        private readonly string _baseUrlpopsci = "https://popsci.com.tr/";
-        private readonly string _baseUrlevrimagaci = "https://evrimagaci.org/kategori/doga-bilimleri-15";
+         private readonly string _baseUrlevrimagaci = "https://evrimagaci.org/kategori/doga-bilimleri-15";
         private readonly string _baseUrlbilimfili = "https://bilimfili.com/kategori/doga-bilimleri?page=";
         private readonly string _baseUrlbilimfilireq = "https://bilimfili.com";
 
@@ -162,23 +162,44 @@ namespace Scienta.Services.Services
         }
 
 
-
-        public async Task<ReadArticleModel> GetArticleFromPopSci(string querystring)
+        public async Task<ReadArticleModel> GetArticle(string querystring, string from)
         {
+           ReadArticleModel model = new ReadArticleModel();
             var client = _httpClientFactory.CreateClient();
             _httpClient = client;
             var response = await client.GetAsync($"{querystring}");
-
             var val = await response.Content.ReadAsStringAsync();
+
+            if (from==PlatformsModel.GetEvrimagaci())
+            {
+                model = GetArticleEvrimAgaci(val);
+            }
+            if (from == PlatformsModel.GetPopsci())
+            {
+                model = GetArticlePopSci(val);
+            }
+            if (from == PlatformsModel.GetBilimFili())
+            {
+                model = GetArticleBilimfili(val);
+            }
+
+         
+            return model;
+        }
+        public ReadArticleModel GetArticleEvrimAgaci(string htmltext)
+        {
+
             var doc = new HtmlDocument();
-            doc.LoadHtml(val);
+            doc.LoadHtml(htmltext);
 
             var datediv = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'content-details-container')]");
             var timeNode = datediv.SelectSingleNode(".//time");
             var date = timeNode?.InnerText.Trim();
+
+
             var headerDiv = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'header-titles')]");
             var h1 = headerDiv.SelectSingleNode(".//h1[contains(@class, 'title')]");
-            var title = h1.InnerText.Trim();  //feed-type-custom
+            var title = h1.InnerText.Trim();  
             var htmlcontent = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'content ql-style clearfix')]").InnerHtml;
 
             var dochtml = new HtmlDocument();
@@ -203,8 +224,60 @@ namespace Scienta.Services.Services
 
 
             htmlcontent = dochtml.DocumentNode.OuterHtml;
-
             return new ReadArticleModel() { Content = htmlcontent, From = PlatformsModel.GetEvrimagaci(), Title = title, Date = date, SourceLink = PlatformsModel.GetEvrimagaciLink() };
+
+
+        }
+        public ReadArticleModel GetArticlePopSci(string htmltext)
+        {
+
+            var doc = new HtmlDocument();
+            doc.LoadHtml(htmltext);
+
+            // başlık
+            var headerDiv = doc.DocumentNode.SelectSingleNode("//header[contains(@class, 'td-post-title')]");
+            var h1 = headerDiv.SelectSingleNode(".//h1[contains(@class, 'entry-title')]");
+            var title = h1.InnerText.Trim();   
+
+            // content
+            var htmlcontent = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'td-post-content')]").InnerHtml;
+
+
+            // date
+            var datediv = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'td-module-meta-info')]");
+            var timeNode = datediv.SelectSingleNode(".//time");
+            var date = timeNode?.InnerText.Trim();
+  
+           
+            return new ReadArticleModel() { Content = htmlcontent, From = PlatformsModel.GetPopsci(), Title = title, Date = date, SourceLink = PlatformsModel.GetPopsciLink() };
+
+
+        }
+        public ReadArticleModel GetArticleBilimfili(string htmltext)
+        {
+
+            var doc = new HtmlDocument();
+            doc.LoadHtml(htmltext);
+
+            // başlık
+            var headerDiv = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'post-header-left')]");
+            var h1 = headerDiv.SelectSingleNode(".//h2[contains(@class, 'post-title')]");
+            var title = h1.InnerText.Trim();
+
+            // date
+            var datediv = headerDiv.SelectSingleNode(".//span[contains(@class, 'post-date')]");
+            var date = datediv?.InnerText.Trim();
+
+            // content
+            var htmlcontent = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'post-content-body')]").InnerHtml;
+
+
+ 
+
+
+            return new ReadArticleModel() { Content = htmlcontent, From = PlatformsModel.GetBilimFili(), Title = title, Date = date, SourceLink = PlatformsModel.GetBilimFiliLink() };
+
+
         }
 
 
