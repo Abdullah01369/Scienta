@@ -66,11 +66,15 @@
 
 
     <div class="d-flex justify-content-center my-5">
-        <a href="#" class="btn btn-outline-secondary btn-lg rounded-pill px-4 me-3 text-uppercase fw-bold shadow-sm" aria-disabled="true">
+
+        <span class="fs-4 fw-bold text-primary mx-3 text-nowrap">
+            @ViewBag.Id . Sayfa
+        </span> <br />
+        <a href="/Home/EvrimAgaciArticles/@ViewBag.BackId" class="btn btn-outline-secondary btn-lg rounded-pill px-4 me-3 text-uppercase fw-bold shadow-sm" aria-disabled="true">
             <i class="fas fa-arrow-left me-2"></i> Önceki
         </a>
 
-        <a href="#" class="btn btn-primary btn-lg rounded-pill px-4 text-uppercase fw-bold shadow">
+        <a href="/Home/EvrimAgaciArticles/@ViewBag.NextId" class="btn btn-primary btn-lg rounded-pill px-4 text-uppercase fw-bold shadow">
             Sonraki <i class="fas fa-arrow-right ms-2"></i>
         </a>
     </div>
