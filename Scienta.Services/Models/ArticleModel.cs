@@ -12,6 +12,6 @@ namespace Scienta.Services.Models
         public string href { get; set; }
         public string img { get; set; }
         public string from { get; set; }
-        public string date { get; set; }
+        public string date { get; set; } = "";
     }
 }

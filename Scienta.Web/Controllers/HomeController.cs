@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Scienta.Services.IServices;
 using Scienta.Web.Models;
 
@@ -11,29 +12,28 @@ namespace Scienta.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IArticleService _articleService;
 
-        public HomeController(ILogger<HomeController> logger,IArticleService articleService)
+        public HomeController(ILogger<HomeController> logger, IArticleService articleService)
         {
-              _articleService = articleService;
+            _articleService = articleService;
             _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
 
-      var evrimagacilist= await   _articleService.GetEvrimAgaciArticles(1);
-        // var val=  await  _articleService.GetPopSciArticles(1);
-        return View(evrimagacilist);
+             //var evrimagacilist= await   _articleService.GetEvrimAgaciArticles(1);
+            // var val=  await  _articleService.GetPopSciArticles(1);
+          // var bilimfililist = await _articleService.GetBilimFiliArticles(1);
+
+          return  RedirectToAction("EvrimAgaciArticles");
+           // return View(evrimagacilist);
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> EvrimAgaciArticles()
         {
-            return View();
+          var val=await  _articleService.GetEvrimAgaciArticles(1);
+            return View(val);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

@@ -19,6 +19,10 @@ namespace Scienta.Services.Models
         {
             return "POPSCI";
         }
+        public static string GetBilimFili()
+        {
+            return "BilimFili";
+        }
 
 
     }

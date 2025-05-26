@@ -1,21 +1,27 @@
 ﻿@using Scienta.Services.Models
 
 @{
+    ViewData["Title"] = "EvrimAgaciArticles";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<h1>EvrimAgaciArticles</h1>
+
 @model List<ArticleModel>
-
-
 
 
 
 <section class="hero-section">
     <div class="container">
-        <h1>Bilimin Aydınlık Dünyasına Hoş Geldiniz</h1>
-        <p>Evrim Ağacı, Bilimfili ve Popsci'den özenle seçilmiş, en güncel bilimsel makaleler tek bir platformda keşfedilmeyi bekliyor.</p>
-        <a href="#articles" class="btn btn-primary btn-lg">Makaleleri Keşfet <i class="fas fa-arrow-down ms-2"></i></a>
+        <h1 class="d-flex align-items-center justify-content-center">
+           
+                Karanlığı Bilimle Fethet!
+            
+            <img src="https://evrimagaci.org/public/images/logo/v3.svg" alt="Bilim İkonu" class="img-fluid ms-5" style="height: 7em;">
+        </h1>
     </div>
 </section>
+ 
 
 <section id="articles" class="container">
     <h2 class="section-title">Son Bilimsel Makaleler</h2>
@@ -54,5 +60,20 @@
                 </div>
             </div>
         }
+  
     </div>
+
+
+
+    <div class="d-flex justify-content-center my-5">
+        <a href="#" class="btn btn-outline-secondary btn-lg rounded-pill px-4 me-3 text-uppercase fw-bold shadow-sm" aria-disabled="true">
+            <i class="fas fa-arrow-left me-2"></i> Önceki
+        </a>
+
+        <a href="#" class="btn btn-primary btn-lg rounded-pill px-4 text-uppercase fw-bold shadow">
+            Sonraki <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+    </div>
+
+
 </section>

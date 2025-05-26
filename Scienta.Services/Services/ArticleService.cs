@@ -2,6 +2,7 @@
 using Scienta.Services.IServices;
 using Scienta.Services.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -17,6 +18,8 @@ namespace Scienta.Services.Services
         private static HttpClient _httpClient;
         private readonly string _baseUrl = "https://popsci.com.tr/kategori/konular/bilim";
         private readonly string _baseUrlevrimagaci = "https://evrimagaci.org/kategori/doga-bilimleri-15";
+        private readonly string _baseUrlbilimfili = "https://bilimfili.com/kategori/doga-bilimleri?page=";
+        private readonly string _baseUrlbilimfilireq = "https://bilimfili.com";
 
         //https://popsci.com.tr/kategori/konular/bilim/page/2/
         public ArticleService(IHttpClientFactory httpClientFactory)
@@ -106,6 +109,50 @@ namespace Scienta.Services.Services
 
 
 
+
+            return links;
+        }
+
+        public async Task<List<ArticleModel>> GetBilimFiliArticles(int Id)
+        {
+            var links = new List<ArticleModel>();
+
+            var client = _httpClientFactory.CreateClient();
+            _httpClient = client;
+
+            var querystring = $"{_baseUrlbilimfili}{Id}";
+         
+            var response = await client.GetAsync(querystring);
+
+            var val = await response.Content.ReadAsStringAsync();
+            var doc = new HtmlDocument();
+            doc.LoadHtml(val);
+
+
+            var items = doc.DocumentNode.SelectNodes("//div[contains(@class, 'row') and contains(@class, 'mb-3_5')]");
+
+            foreach (var item in items)
+            {
+
+                var titleNode = item.SelectSingleNode(".//h3[contains(@class,'title')]/a");
+                string link =_baseUrlbilimfilireq+titleNode?.GetAttributeValue("href", "").Trim();
+                
+
+                string title = titleNode?.InnerText.Trim();
+
+
+                var imgNode = item.SelectSingleNode(".//div[contains(@class,'list-img')]//img");
+                string imgSrc = _baseUrlbilimfilireq+imgNode?.GetAttributeValue("src", "").Trim();
+
+
+                var smallNode = item.SelectSingleNode(".//small[contains(@class,'author')]");
+
+                 var tarih = HtmlEntity.DeEntitize(smallNode.InnerText).Trim().Split('|')[1].Trim();
+                
+
+                links.Add(new ArticleModel { date = tarih, from = PlatformsModel.GetBilimFili(), href = link, img = imgSrc, title = title });
+
+            }
 
             return links;
         }
