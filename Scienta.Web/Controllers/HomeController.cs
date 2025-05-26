@@ -21,12 +21,8 @@ namespace Scienta.Web.Controllers
         public async Task<IActionResult> Index()
         {
 
-            //var evrimagacilist= await   _articleService.GetEvrimAgaciArticles(1);
-            // var val=  await  _articleService.GetPopSciArticles(1);
-            // var bilimfililist = await _articleService.GetBilimFiliArticles(1);
-
-            return RedirectToAction("EvrimAgaciArticles");
-            // return View(evrimagacilist);
+            return View();
+          
         }
 
         public async Task<IActionResult> EvrimAgaciArticles(int Id = 1)
@@ -38,6 +34,20 @@ namespace Scienta.Web.Controllers
             ViewBag.NextId = Id+1;
             ViewBag.Id = Id;
             var val = await _articleService.GetEvrimAgaciArticles(Id);
+            return View(val);
+        }
+
+        public async Task<IActionResult> PopSciArticles(int Id = 1)
+        {
+            if (Id < 1)
+            {
+                Id = 1;
+            }
+            ViewBag.BackId = Id - 1;
+            ViewBag.NextId = Id + 1;
+            ViewBag.Id = Id;
+            var val = await _articleService.GetPopSciArticles(Id);
+
             return View(val);
         }
 

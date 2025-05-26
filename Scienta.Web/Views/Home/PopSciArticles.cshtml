@@ -1,26 +1,26 @@
 ﻿@using Scienta.Services.Models
 
 @{
-    ViewData["Title"] = "EvrimAgaciArticles";
+    ViewData["Title"] = "PopSciArticles";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
- 
 @model List<ArticleModel>
 
 
+@{
+    int articleCount = 0;
+}
 
 <section class="hero-section">
     <div class="container">
         <h1 class="d-flex align-items-center justify-content-center">
-           
-                Karanlığı Bilimle Fethet!
-            
-            <img src="https://evrimagaci.org/public/images/logo/v3.svg" alt="Bilim İkonu" class="img-fluid ms-5" style="height: 7em;">
+
+            Bilimin Türkiye’deki öncü yayını.
+            <img src="~/img/popsci.png" alt="Bilim İkonu" class="img-fluid ms-5" style="height: 5em;">
         </h1>
     </div>
 </section>
- 
 
 <section id="articles" class="container">
     <h2 class="section-title">Son Bilimsel Makaleler</h2>
@@ -33,7 +33,10 @@
                     <img src="@item.img" alt="@item.title">
                     <div class="card-body">
                         <h5 class="card-title">@item.title</h5>
-
+                        @if (articleCount < 5)
+                        {
+                            <i class="fas fa-star text-warning ms-2"></i>
+                        }
                         <div class="card-footer-custom">
                             <div class="source-info">
                                 @if (@item.from == PlatformsModel.GetEvrimagaci())
@@ -58,8 +61,14 @@
                     </div>
                 </div>
             </div>
+
+
+            articleCount++;  
+
         }
-  
+
+
+
     </div>
 
 
@@ -69,14 +78,16 @@
         <span class="fs-4 fw-bold text-primary mx-3 text-nowrap">
             @ViewBag.Id . Sayfa
         </span> <br />
-        <a href="/Home/EvrimAgaciArticles/@ViewBag.BackId" class="btn btn-outline-secondary btn-lg rounded-pill px-4 me-3 text-uppercase fw-bold shadow-sm" aria-disabled="true">
+        <a href="/Home/PopSciArticles/@ViewBag.BackId" class="btn btn-outline-secondary btn-lg rounded-pill px-4 me-3 text-uppercase fw-bold shadow-sm" aria-disabled="true">
             <i class="fas fa-arrow-left me-2"></i> Önceki
         </a>
 
-        <a href="/Home/EvrimAgaciArticles/@ViewBag.NextId" class="btn btn-primary btn-lg rounded-pill px-4 text-uppercase fw-bold shadow">
+        <a href="/Home/PopSciArticles/@ViewBag.NextId" class="btn btn-primary btn-lg rounded-pill px-4 text-uppercase fw-bold shadow">
             Sonraki <i class="fas fa-arrow-right ms-2"></i>
         </a>
     </div>
 
 
 </section>
+
+

@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model List<ArticleModel>
+
 
 
 
@@ -14,45 +14,54 @@
         <h1>Bilimin Aydınlık Dünyasına Hoş Geldiniz</h1>
         <p>Evrim Ağacı, Bilimfili ve Popsci'den özenle seçilmiş, en güncel bilimsel makaleler tek bir platformda keşfedilmeyi bekliyor.</p>
         <a href="#articles" class="btn btn-primary btn-lg">Makaleleri Keşfet <i class="fas fa-arrow-down ms-2"></i></a>
-    </div>
-</section>
-
-<section id="articles" class="container">
-    <h2 class="section-title">Son Bilimsel Makaleler</h2>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-
-        @foreach (var item in Model)
-        {
-            <div class="col d-flex">
-                <div class="article-card">
-                    <img src="@item.img" alt="@item.title">
-                    <div class="card-body">
-                        <h5 class="card-title">@item.title</h5>
-
-                        <div class="card-footer-custom">
-                            <div class="source-info">
-                                @if (@item.from == PlatformsModel.GetEvrimagaci())
-                                {
-                                    <img class="source-logo" src="https://evrimagaci.org/public/images/logo/v3.svg" alt="Evrim Ağacı Logo" />
-                                    <span>Evrim Ağacı</span>
-                                }
-                                @if (@item.from == PlatformsModel.GetPopsci())
-                                {
-                                    <img class="source-logo" src="~/img/popsci-favicon.png" alt="Popsci Logo" />
-                                    <span>Popsci</span>
-                                }
-                                @if (@item.from == PlatformsModel.GetBilimFili())
-                                {
-                                    <img class="source-logo" src="~/img/bilimfililogo.png" alt="Bilimfili Logo" />
-                                    <span>Bilimfili</span>
-                                }
+        <section class="quotes-section  py-4">
+            <div class="container">
+                <div id="quoteCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="d-flex flex-column align-items-center text-center px-lg-5">
+                                <blockquote class="blockquote mb-0 fs-3">
+                                    <p class="mb-0 fst-italic text-dark">"Bir ulus, varlığını sürdürmek ve çağdaş bir ulus olmak için, bilime ve teknolojiye önem vermek zorundadır"</p>
+                                    <span class="blockquote-footer mt-2 fs-5 text-dark">Mustafa Kemal Atatürk</span>
+                                </blockquote>
                             </div>
-                            <span>@item.date</span>
-                            <a href="@item.href" target="_blank" class="read-more-btn">Oku</a>
+                        </div>
+                        <div class="carousel-item  ">
+                            <div class="d-flex flex-column align-items-center text-center px-lg-5">
+                                <blockquote class="blockquote mb-0 fs-3">
+                                    <p class="mb-0 fst-italic text-dark">"Hayal gücü bilgiden daha önemlidir."</p>
+                                    <span class="blockquote-footer mt-2 fs-5 text-dark">Albert Einstein</span>
+                                </blockquote>
+                            </div>
+                        </div>
+                        <div class="carousel-item  ">
+                            <div class="d-flex flex-column align-items-center text-center px-lg-5">
+                                <blockquote class="blockquote mb-0 fs-3">
+                                    <p class="mb-0 fst-italic text-dark">"Çok çalışmadan, bilime büyük katkılar yapamazsınız. Ben de öyle yaptım, çok çalıştım."</p>
+                                    <span class="blockquote-footer mt-2 fs-5 text-dark">Aziz Sancar</span>
+                                </blockquote>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="d-flex flex-column align-items-center text-center px-lg-5">
+                                <blockquote class="blockquote mb-0 fs-3">
+                                    <p class="mb-0 fst-italic text-dark">"Bilim, anlama sanatıdır."</p>
+                                    <span class="blockquote-footer mt-2 fs-5 text-dark">Marie Curie</span>
+                                </blockquote>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="d-flex flex-column align-items-center text-center px-lg-5">
+                                <blockquote class="blockquote mb-0 fs-3">
+                                    <p class="mb-0 fst-italic text-dark">"Evrene bak ve ne kadar meraklı olduğunu fark et. Evrene bakmak, onu merak etmek ve anlamak, bizim için bir ayrıcalıktır.."</p>
+                                    <span class="blockquote-footer mt-2 fs-5 text-dark">Stephen Hawking</span>
+                                </blockquote>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        }
+        </section>
     </div>
 </section>
+
