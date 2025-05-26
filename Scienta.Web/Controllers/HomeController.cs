@@ -51,5 +51,19 @@ namespace Scienta.Web.Controllers
             return View(val);
         }
 
+        public async Task<IActionResult> BilimFiliArticles(int Id = 1)
+        {
+            if (Id < 1)
+            {
+                Id = 1;
+            }
+            ViewBag.BackId = Id - 1;
+            ViewBag.NextId = Id + 1;
+            ViewBag.Id = Id;
+            var val = await _articleService.GetBilimFiliArticles(Id);
+
+            return View(val);
+        }
+
     }
 }
