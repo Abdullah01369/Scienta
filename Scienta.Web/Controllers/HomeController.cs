@@ -65,5 +65,13 @@ namespace Scienta.Web.Controllers
             return View(val);
         }
 
+
+        public async Task<IActionResult> ReadArticle(string url)
+        {
+          var val=await  _articleService.GetArticleFromPopSci(url);
+            
+            return View(val);
+        }
+
     }
 }

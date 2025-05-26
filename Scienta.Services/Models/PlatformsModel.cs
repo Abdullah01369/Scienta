@@ -24,6 +24,19 @@ namespace Scienta.Services.Models
             return "BilimFili";
         }
 
+        public static string GetEvrimagaciLink()
+        {
+            return "https://evrimagaci.org";
+        }
+        public static string GetPopsciLink()
+        {
+            return "https://popsci.com.tr";
+        }
+        public static string GetBilimFiliLink()
+        {
+            return "https://bilimfili.com";
+        }
+
 
     }
 }

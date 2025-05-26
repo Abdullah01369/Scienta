@@ -1,0 +1,43 @@
+﻿@using Scienta.Services.Models
+
+@{
+    ViewData["Title"] = "ReadArticle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model ReadArticleModel
+<section id="articles" class="container">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <article class="p-4 bg-white shadow rounded">
+            
+                <h1 class="mb-3">@Model.Title</h1>
+
+            
+                <div class="text-muted mb-4">
+                    <span>Kaynak: <strong>@Model.From</strong></span> |
+                    <span>Tarih: <strong>@Model.Date</strong></span>
+                </div>
+
+                 <div class="alert alert-secondary">
+                     <p class="mb-0">
+                        Bu Makale https://evrimagaci.org sitesinden alınmıştır.
+                    </p>
+                </div>
+
+                 <div id="makale-icerik" class="mt-4">
+
+                    @Html.Raw(Model.Content)
+
+                </div>
+            </article>
+        </div>
+    </div>
+
+
+
+
+
+</section>
+
+ 
