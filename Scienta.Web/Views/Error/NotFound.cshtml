@@ -1,0 +1,99 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | Scienta</title>
+    <link href="~/css/errorpage.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Floating shapes -->
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+
+    <div class="container">
+        <div class="error-code">404</div>
+        <h1 class="title">Aradığın Sayfa Kayıp!</h1>
+        <p class="subtitle">
+            Maalesef bu yolda aradığın bilgiye rastlayamadık.<br>
+            Ama endişe etme, başka güzel keşifler seni bekliyor.
+        </p>
+
+        <div class="story-section">
+            <h3 class="story-title">
+                🔍 Ne Oldu Burada?
+            </h3>
+            <p class="story-text">
+                Bilim yolculuğunda bazen kaybolmak normaldir. Belki bu sayfa başka bir boyuta geçti,
+                ya da henüz keşfedilmemiş bir teoriyi araştırıyor. Kim bilir, belki de evrenin
+                genişlemesiyle birlikte uzak bir galaksiye taşındı!
+            </p>
+
+            <div class="metaphor">
+                "Bilim, bilinmeyene yapılan bir yolculuktur. Kaybolduğun her an,
+                aslında yeni bir keşfin başlangıcıdır."
+            </div>
+
+            <div class="poem">
+                Aradığın sayfa şimdi buralarda yok,<br>
+                Ama merak etme, başka yollar çok.<br>
+                Bilimin kapıları hep açık sana,<br>
+                Gel, yeni keşiflere birlikte çıkalım yana.
+            </div>
+        </div>
+
+        <div class="solution-grid">
+            <div href="/Home/Index" class="solution-card">
+                <div class="solution-icon">🏠</div>
+                <h4 class="solution-title">Ana Sayfaya Dön</h4>
+                <p class="solution-desc">
+                    Bilim yolculuğuna başlangıç noktasından devam et
+                </p>
+            </div>
+
+            < 
+        </div>
+
+        <div class="buttons">
+            <a href="/Home/Index" class="btn btn-primary">
+                🏠 Ana Sayfaya Dön
+            </a>
+           
+        </div>
+    </div>
+
+    <script>
+        // Smooth entrance animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(30px)';
+
+            setTimeout(() => {
+                container.style.transition = 'all 0.8s ease';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+
+        // Add subtle parallax effect
+        document.addEventListener('mousemove', function(e) {
+            const shapes = document.querySelectorAll('.shape');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            shapes.forEach((shape, index) => {
+                const speed = (index + 1) * 0.5;
+                shape.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -24,7 +24,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+
+
 app.UseAuthorization();
+app.UseStatusCodePagesWithReExecute("/Error/{0}");
+
 
 app.MapStaticAssets();
 
