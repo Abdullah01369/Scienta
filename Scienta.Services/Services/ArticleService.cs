@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using Scienta.Services.IServices;
 using Scienta.Services.Models;
+using System.ComponentModel.Design;
 
 
 namespace Scienta.Services.Services
@@ -61,49 +62,59 @@ namespace Scienta.Services.Services
         public async Task<List<ArticleModel>> GetEvrimAgaciArticles(int Id)
         {
             var links = new List<ArticleModel>();
-
-            var client = _httpClientFactory.CreateClient();
-
-
-            var query = (Id - 1) * 36;
-            var querystring = $"{_baseUrlevrimagaci}/{query}";
-            var response = await client.GetAsync(querystring);
-
-            var val = await response.Content.ReadAsStringAsync();
-            var doc = new HtmlDocument();
-            doc.LoadHtml(val);
-
-
-            var items = doc.DocumentNode.SelectNodes("//div[contains(@class, 'home-content-box-item')]");
-
-
-
-            foreach (var item in items)
+            try
             {
+                
 
-                var titleNode = item.SelectSingleNode(".//h3[contains(@class,'home-content-box-title')]/a");
-                string link = titleNode?.GetAttributeValue("href", "").Trim();
-                string title = titleNode?.InnerText.Trim();
-
-
-                var imgNode = item.SelectSingleNode(".//div[contains(@class,'position-relative')]//img");
-                string imgSrc = imgNode?.GetAttributeValue("src", "").Trim();
+                var client = _httpClientFactory.CreateClient();
 
 
-                var tarihNode = item.SelectNodes(".//div[contains(@class,'home-content-box-tag')]")
-                                 ?.FirstOrDefault(x => x.InnerText.Contains("Tarih"));
-                string tarih = tarihNode?.InnerText.Replace("Tarih :", "").Trim();
+                var query = (Id - 1) * 36;
+                var querystring = $"{_baseUrlevrimagaci}/{query}";
+                var response = await client.GetAsync(querystring);
+
+                var val = await response.Content.ReadAsStringAsync();
+                var doc = new HtmlDocument();
+                doc.LoadHtml(val);
 
 
-                links.Add(new ArticleModel { date = tarih, from = PlatformsModel.GetEvrimagaci(), href = link, img = imgSrc, title = title });
+                var items = doc.DocumentNode.SelectNodes("//div[contains(@class, 'home-content-box-item')]");
+
+
+
+                foreach (var item in items)
+                {
+
+                    var titleNode = item.SelectSingleNode(".//h3[contains(@class,'home-content-box-title')]/a");
+                    string link = titleNode?.GetAttributeValue("href", "").Trim();
+                    string title = titleNode?.InnerText.Trim();
+
+
+                    var imgNode = item.SelectSingleNode(".//div[contains(@class,'position-relative')]//img");
+                    string imgSrc = imgNode?.GetAttributeValue("src", "").Trim();
+
+
+                    var tarihNode = item.SelectNodes(".//div[contains(@class,'home-content-box-tag')]")
+                                     ?.FirstOrDefault(x => x.InnerText.Contains("Tarih"));
+                    string tarih = tarihNode?.InnerText.Replace("Tarih :", "").Trim();
+
+
+                    links.Add(new ArticleModel { date = tarih, from = PlatformsModel.GetEvrimagaci(), href = link, img = imgSrc, title = title });
+
+                }
+
+
+
+
+
+                return links;
 
             }
+            catch (Exception)
+            {
 
-
-
-
-
-            return links;
+                return links;
+            }
         }
 
         public async Task<List<ArticleModel>> GetBilimFiliArticles(int Id)

@@ -7,6 +7,10 @@
 
 <section class="hero-section">
     <div class="container">
+        @if (ViewBag.Error=="")
+        {
+            <div class="alert-info">@ViewBag.Error</div>
+        }
         <h1>Bilimin Aydınlık Dünyasına Hoş Geldiniz</h1>
         <p>Evrim Ağacı, Bilimfili ve Popsci'den özenle seçilmiş, en güncel bilimsel makaleler tek bir platformda keşfedilmeyi bekliyor.</p>
         <a href="#articles" class="btn btn-primary btn-lg">Makaleleri Keşfet <i class="fas fa-arrow-down ms-2"></i></a>

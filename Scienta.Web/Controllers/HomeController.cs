@@ -12,9 +12,11 @@ namespace Scienta.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IArticleService _articleService;
+        private readonly IAiServices _aiServices;
 
-        public HomeController(ILogger<HomeController> logger, IArticleService articleService)
+        public HomeController(ILogger<HomeController> logger, IArticleService articleService, IAiServices aiServices)
         {
+            _aiServices = aiServices;
             _articleService = articleService;
             _logger = logger;
         }
@@ -22,19 +24,24 @@ namespace Scienta.Web.Controllers
         public async Task<IActionResult> Index()
         {
 
-            return View();
-          
+             return View();
         }
 
         public async Task<IActionResult> EvrimAgaciArticles(int Id = 1)
         {
-            if (Id < 1) {
+            if (Id < 1)
+            {
                 Id = 1;
             }
-            ViewBag.BackId = Id-1;
-            ViewBag.NextId = Id+1;
+            ViewBag.BackId = Id - 1;
+            ViewBag.NextId = Id + 1;
             ViewBag.Id = Id;
             var val = await _articleService.GetEvrimAgaciArticles(Id);
+
+            if (val.Count==0) {
+                ViewBag.Error = "Bir hata ile karþýlaþtýk, daha sonra deneyiniz...";
+                return View("Index");
+            }
             return View(val);
         }
 
@@ -48,6 +55,12 @@ namespace Scienta.Web.Controllers
             ViewBag.NextId = Id + 1;
             ViewBag.Id = Id;
             var val = await _articleService.GetPopSciArticles(Id);
+
+            if (val.Count == 0)
+            {
+                ViewBag.Error = "Bir hata ile karþýlaþtýk, daha sonra deneyiniz...";
+                return View("Index");
+            }
 
             return View(val);
         }
@@ -63,13 +76,18 @@ namespace Scienta.Web.Controllers
             ViewBag.Id = Id;
             var val = await _articleService.GetBilimFiliArticles(Id);
 
+            if (val.Count == 0)
+            {
+                ViewBag.Error = "Bir hata ile karþýlaþtýk, daha sonra deneyiniz...";
+                return View("Index");
+            }
+
             return View(val);
         }
 
-
         public async Task<IActionResult> ReadArticle(string url)
         {
-            string from="";
+            string from = "";
             ReadArticleModel model = new ReadArticleModel();
             if (url.Contains("popsci"))
             {
@@ -83,10 +101,23 @@ namespace Scienta.Web.Controllers
             {
                 from = PlatformsModel.GetBilimFili();
             }
-            var val=await  _articleService.GetArticle(url,from);
-            
+            var val = await _articleService.GetArticle(url, from);
+
             return View(val);
         }
+
+
+        public async Task<PartialViewResult> GetArticleSummary(  [FromBody] AiSummaryRequestPartial text)
+        {
+           var val = await _aiServices.GetSummaryFromDeepSeek(text.inputText);
+            if (val.IsSuccess)
+            {
+                return PartialView("GetArticleSummary", val.Content);
+            }
+            return PartialView("GetArticleSummary", "Bir hata ile karþýlaþýldý. Belki de internet sýkýntýlýdýr, bilmiyorum");
+        }
+
+
 
     }
 }
