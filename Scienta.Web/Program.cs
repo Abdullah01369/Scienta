@@ -10,6 +10,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IArticleService,ArticleService>();
 builder.Services.AddScoped<IAiServices,AiServices>();
 builder.Services.AddHttpClient<HomeController>();
+builder.WebHost.UseUrls("http://*:5000");
 
 builder.Services.AddHttpClient();
 var app = builder.Build();
